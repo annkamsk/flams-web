@@ -1,9 +1,9 @@
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
-from flams.web.process import process_request
+from flams_web.web.process import process_request
 
-from flams.web.form import InputForm
-
+from flams_web.web.form import InputForm
+from flams.flams.run_blast import run_blast
 
 app = Flask(__name__)
 
