@@ -1,0 +1,6 @@
+-e flams
+black
+bootstrap-flask
+flake8
+Flask
+flask_wtf

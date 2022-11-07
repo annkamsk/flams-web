@@ -1,9 +1,9 @@
 from flask import Flask, render_template
-from flask_bootstrap import Bootstrap
-from flams_web.web.process import process_request
+from flask_bootstrap import Bootstrap4
+from flams_web.process import process_request
 
-from flams_web.web.form import InputForm
-from flams.flams.run_blast import run_blast
+from flams_web.form import InputForm
+
 
 app = Flask(__name__)
 
@@ -13,7 +13,7 @@ app.config.update(
     SECRET_KEY="192b9bdd22ab9ed4d12e236c78afcb9a393ec15f71bbf5dc987d54727823bcbf",
 )
 
-Bootstrap(app)
+Bootstrap4(app)
 
 
 @app.route("/", methods=["POST", "GET"])

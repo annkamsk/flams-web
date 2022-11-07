@@ -1,0 +1,12 @@
+body {
+    background: #FFFFFF;
+    min-height: 100vh;
+}
+
+#page-content {
+    min-height: 95vh;
+}
+
+#input {
+    min-height: 10vh;
+}
