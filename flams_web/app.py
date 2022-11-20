@@ -11,6 +11,7 @@ app = Flask(__name__)
 app.config.update(
     DEBUG=True,
     SECRET_KEY="192b9bdd22ab9ed4d12e236c78afcb9a393ec15f71bbf5dc987d54727823bcbf",
+    MAX_CONTENT_LENGTH=20 * 1024 * 1024,  # allow files <= 20MB
 )
 
 Bootstrap4(app)
@@ -18,12 +19,11 @@ Bootstrap4(app)
 
 @app.route("/", methods=["POST", "GET"])
 def index():
-    message = ""
+    errors = []
     form = InputForm(modifications=["acetylation"])
     if form.validate_on_submit():
-        process_request(form)
-        message = "Success"
-    return render_template("index.html", form=form, message=message, title="Flams")
+        errors = process_request(form)
+    return render_template("index.html", form=form, errors=errors, title="Flams")
 
 
 if __name__ == "__main__":

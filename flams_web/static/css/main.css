@@ -10,3 +10,8 @@ body {
 #input {
     min-height: 10vh;
 }
+
+.error-messages {
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+}
