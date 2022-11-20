@@ -50,15 +50,16 @@ FLAMS
                                     name="{{ form.fasta_file.id }}" required type="file">
                             </div>
                         </div>
-                        <div class="input-group mb-3" id="uniprot" hidden="true">
-                            <input type="text" class="form-control" id="{{ form.uniprot_id.id }}"
-                                placeholder="eg. P12345">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button">Search</button>
+                        <div id="uniprot" hidden="true">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="{{ form.uniprot_id.id }}"
+                                    placeholder="eg. P12345">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button" id="uniprotSearch">Search</button>
+                                </div>
                             </div>
-
+                            <div class="alert alert-light" role="alert" id="uniprotSearchResult" hidden="true"></div>
                         </div>
-
                     </div>
                     {{ wtf.render_field(form.modifications) }}
 

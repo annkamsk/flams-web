@@ -13,3 +13,23 @@ inputTypeRadios.forEach(element => element.addEventListener("change", e => {
         }
     }
 }));
+
+document.getElementById("uniprotSearch").addEventListener("click", (e) => {
+    var uniprotId = document.getElementById("uniprot_id").value;
+    fetch(`https://rest.uniprot.org/uniprotkb/${uniprotId}?format=json`)
+        .then(res => {
+            if (!res.ok) {
+                throw new Error ("Invalid Uniprot ID");
+            }
+            return res.json()
+        })
+        .then(data => {
+            const name = data.proteinDescription.recommendedName.fullName.value;
+            document.getElementById("uniprotSearchResult").innerHTML = `<b>Uniprot OK</b>:${name}`;
+            document.getElementById("uniprotSearchResult").hidden = false;
+        })
+        .catch(error => {
+            document.getElementById("uniprotSearchResult").innerHTML = error;
+            document.getElementById("uniprotSearchResult").hidden = false;
+        })
+})
