@@ -33,7 +33,7 @@ class InputForm(FlaskForm):
     )
     modifications = SelectMultipleField(
         label="Modifications",
-        choices=["acetylation"],
+        choices=["acetylation", "lactylation", "formylation", "succinylation", "hmgylation"],
         validators=[InputRequired()],
     )
     position = IntegerField(
