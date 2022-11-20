@@ -8,6 +8,7 @@ from wtforms import (
     StringField,
 )
 from wtforms.validators import NumberRange, Optional, InputRequired, Regexp
+import flams.databases.setup
 
 
 class InputForm(FlaskForm):
@@ -33,7 +34,7 @@ class InputForm(FlaskForm):
     )
     modifications = SelectMultipleField(
         label="Modifications",
-        choices=["acetylation", "lactylation", "formylation", "succinylation", "hmgylation"],
+        choices=flams.databases.setup.MODIFICATIONS.keys(),
         validators=[InputRequired()],
     )
     position = IntegerField(
