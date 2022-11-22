@@ -1,4 +1,4 @@
--e flams
+git+https://github.com/annkamsk/flams.git
 black
 bootstrap-flask
 flake8
