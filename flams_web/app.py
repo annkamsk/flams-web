@@ -1,6 +1,10 @@
-from flask import Flask, render_template
+from flask import Flask, redirect, render_template, request, url_for
 from flask_bootstrap import Bootstrap4
-from flams_web.process import process_request
+from flams_web.process import (
+    ProcessedRequest,
+    process_request,
+    run_blast_and_save_result,
+)
 
 from flams_web.form import InputForm
 
@@ -22,11 +26,19 @@ def index():
     form = InputForm(modifications=["acetylation"])
     if form.validate_on_submit():
         processed_request = process_request(form)
-        return render_template(
-            "index.html", form=form, processed_request=processed_request
+        return redirect(
+            url_for("result", processed_request=processed_request.to_json())
         )
 
     return render_template("index.html", form=form, processed_request=None)
+
+
+@app.route("/result")
+def result():
+    data = request.args.get("processed_request")
+    processed_request = ProcessedRequest.from_json(data)
+    run_blast_and_save_result(processed_request)
+    return "Success"
 
 
 if __name__ == "__main__":
