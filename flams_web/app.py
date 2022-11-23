@@ -19,11 +19,14 @@ Bootstrap4(app)
 
 @app.route("/", methods=["POST", "GET"])
 def index():
-    errors = []
     form = InputForm(modifications=["acetylation"])
     if form.validate_on_submit():
-        errors = process_request(form)
-    return render_template("index.html", form=form, errors=errors, title="Flams")
+        processed_request = process_request(form)
+        return render_template(
+            "index.html", form=form, processed_request=processed_request
+        )
+
+    return render_template("index.html", form=form, processed_request=None)
 
 
 if __name__ == "__main__":

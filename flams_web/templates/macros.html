@@ -1,0 +1,13 @@
+{% macro display_feedback(processed_request) -%}
+{% if processed_request.is_success %}
+<div class="alert alert-info" role="alert">
+    <p>Query received</p>
+</div>
+{% else %}
+<div class="alert alert-danger error-messages" role="alert">
+    {% for error in processed_request.errors %}
+    <p>{{ error.message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+{%- endmacro %}

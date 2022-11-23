@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% import "bootstrap4/form.html" as wtf %}
+{% import "macros.html" as macros %}
 
 {% block styles %}
 {{ bootstrap.load_css() }}
@@ -9,6 +10,9 @@
 
 {% block content %}
 
+{% if processed_request %}
+{{ macros.display_feedback(processed_request) }}
+{% endif %}
 
 <form class="form" method="post" role="form" enctype="multipart/form-data">
     {{ form.csrf_token }}
