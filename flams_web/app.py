@@ -24,13 +24,14 @@ Bootstrap4(app)
 @app.route("/", methods=["POST", "GET"])
 def index():
     form = InputForm(modifications=["acetylation"])
+    processed_request = None
     if form.validate_on_submit():
         processed_request = process_request(form)
-        return redirect(
-            url_for("result", processed_request=processed_request.to_json())
-        )
-
-    return render_template("index.html", form=form, processed_request=None)
+        if processed_request.is_success:
+            return redirect(
+                url_for("result", processed_request=processed_request.to_json())
+            )
+    return render_template("index.html", form=form, processed_request=processed_request)
 
 
 @app.route("/result")
