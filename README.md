@@ -7,7 +7,9 @@ Download this repository:
 `cd flams-web`
 
 Install dependencies:
-`pip install -r requirements.txt`
+`pip install -r requirements.txt --force-reinstall`
+
+`--force-reinstall` is to force pip to get the version of flams that's up-to-date with main. 
 
 ## Run
 
