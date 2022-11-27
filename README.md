@@ -2,14 +2,20 @@
 
 ## Install
 Download this repository:
+
 `git clone git@github.com:annkamsk/flams-web.git`
 
 `cd flams-web`
 
 Install dependencies:
+
 `pip install -r requirements.txt --force-reinstall`
 
 `--force-reinstall` is to force pip to get the version of flams that's up-to-date with main. 
+
+Setup databases:
+
+`python install.py`
 
 ## Run
 
