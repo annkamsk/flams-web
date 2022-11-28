@@ -9,14 +9,16 @@ from flams_web.process import (
 from flask import send_file
 from flams_web.form import InputForm
 import csv
+import os
+from dotenv import load_dotenv
 
 
 app = Flask(__name__)
+load_dotenv()
 
-# FIXME do not deploy to production before setting proper env vars here!!!
 app.config.update(
-    DEBUG=True,
-    SECRET_KEY="192b9bdd22ab9ed4d12e236c78afcb9a393ec15f71bbf5dc987d54727823bcbf",
+    DEBUG=os.environ.get("ENV") == "TEST",
+    SECRET_KEY=os.environ.get("SECRET_KEY"),
     MAX_CONTENT_LENGTH=20 * 1024 * 1024,  # allow files <= 20MB
 )
 
@@ -26,6 +28,7 @@ Bootstrap4(app)
 @app.route("/", methods=["POST", "GET"])
 def index():
     form = InputForm(modifications=["acetylation"])
+    processed_request = None
     if form.validate_on_submit():
         processed_request = process_request(form)
         if processed_request.is_success:
