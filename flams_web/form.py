@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, FileAllowed, FileRequired
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import (
     SubmitField,
     IntegerField,
@@ -19,8 +19,8 @@ class InputForm(FlaskForm):
     )
     fasta_file = FileField(
         validators=[
-            FileRequired(),
             FileAllowed(["fa", "fasta"], "Only fasta files allowed!"),
+            Optional(),
         ],
     )
     uniprot_id = StringField(
@@ -29,6 +29,7 @@ class InputForm(FlaskForm):
             Regexp(
                 r"[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}"
             ),
+            Optional(),
         ]
     )
     modifications = SelectMultipleField(
@@ -42,3 +43,7 @@ class InputForm(FlaskForm):
     )
     range = IntegerField("+/- positions", validators=[NumberRange(min=0), Optional()])
     submit = SubmitField("Submit")
+
+    def validate(self, *args, **kwargs) -> bool:
+        super(InputForm, self).validate(*args, **kwargs)
+        return self.fasta_file.raw_data or self.uniprot_id.raw_data
