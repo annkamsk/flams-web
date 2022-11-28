@@ -8,6 +8,7 @@ import uuid
 from flams.input import is_valid_fasta_file, is_position_lysine
 from flams.databases.setup import update_db_for_modifications
 from flams.run_blast import run_blast
+import requests
 from flams_web.form import InputForm
 
 UPLOAD_PATH = Path(__file__).parent / "upload"
@@ -81,18 +82,40 @@ def validate_input(fasta_file: Path, position: int) -> List[InputError]:
     return errors
 
 
-def save_uploaded_file(form: InputForm) -> Tuple[Path, str]:
+def save_uploaded_file(form: InputForm, request_id: str) -> Path:
     fasta_file = form.fasta_file.data
-    file_id = uuid.uuid4().hex.upper()
-    filename = f"{file_id}.fa"
+    filename = f"{request_id}.fa"
     fasta_file.save(UPLOAD_PATH / filename)
-    return UPLOAD_PATH / filename, file_id
+    return UPLOAD_PATH / filename
+
+
+def save_protein_from_uniprot(form: InputForm, request_id: str) -> Path:
+    uniprot_id = form.uniprot_id.data
+    url = f"https://rest.uniprot.org/uniprotkb/{uniprot_id}.fasta"
+    r = requests.get(url)
+
+    r.raise_for_status()
+
+    filename = UPLOAD_PATH / f"{request_id}.fa"
+    with filename.open("w+") as f:
+        f.write(r.text)
+
+    return filename
 
 
 def process_request(form: InputForm) -> ProcessedRequest:
-    file, file_id = save_uploaded_file(form)
+    request_id = generate_request_id()
+
+    if form.fasta_file.data:
+        file = save_uploaded_file(form, request_id)
+    else:
+        file = save_protein_from_uniprot(form, request_id)
     errors = validate_input(file, form.position.data)
-    return ProcessedRequest(file_id, form=form, errors=errors)
+    return ProcessedRequest(request_id, form=form, errors=errors)
+
+
+def generate_request_id():
+    return uuid.uuid4().hex.upper()
 
 
 def run_blast_and_save_result(request: ProcessedRequest):
