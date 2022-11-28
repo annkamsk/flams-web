@@ -8,6 +8,7 @@ import uuid
 from flams.input import is_valid_fasta_file, is_position_lysine
 from flams.databases.setup import update_db_for_modifications
 from flams.run_blast import run_blast
+from flams.display import display_result
 from flams_web.form import InputForm
 
 UPLOAD_PATH = Path(__file__).parent / "upload"
@@ -98,13 +99,15 @@ def process_request(form: InputForm) -> ProcessedRequest:
 def run_blast_and_save_result(request: ProcessedRequest):
     # TODO this should be run within some setup function on app install
     update_db_for_modifications(request.data.modifications)
-    run_blast(
+    results = run_blast(
         input=UPLOAD_PATH / f"{request.id}.fa",
         modifications=request.data.modifications,
         lysine_pos=request.data.position,
         lysine_range=request.data.range,
     )
-    # TODO uncomment when display_result merged to main
-    # filename = RESULTS_PATH / f"{request.id}.csv"
-    # display_result(filename, results)
-    # return filename
+    filename = _get_results_filename(request.id)
+    display_result(filename, results)
+    return filename
+
+def _get_results_filename(request_id):
+    return RESULTS_PATH / f"{request_id}.tsv"
