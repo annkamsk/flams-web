@@ -5,11 +5,18 @@ let inputTypeRadios = document.getElementsByName("input_type");
 inputTypeRadios.forEach(element => element.addEventListener("change", e => {
     if (e.target.checked) {
         if (e.target.id == "input_type-0") {
-            document.getElementById("fasta_file").hidden = false;
+            document.getElementById("fasta").hidden = false;
+            document.getElementById("fasta_file").required = true;
+
             document.getElementById("uniprot").hidden = true;
+            document.getElementById("uniprot_id").required = false;
+
         } else {
-            document.getElementById("fasta_file").hidden = true;
+            document.getElementById("fasta").hidden = true;
+            document.getElementById("fasta_file").required = false;
+
             document.getElementById("uniprot").hidden = false;
+            document.getElementById("uniprot_id").required = true;
         }
     }
 }));
@@ -19,7 +26,7 @@ document.getElementById("uniprotSearch").addEventListener("click", (e) => {
     fetch(`https://rest.uniprot.org/uniprotkb/${uniprotId}?format=json`)
         .then(res => {
             if (!res.ok) {
-                throw new Error ("Invalid Uniprot ID");
+                throw new Error("Invalid Uniprot ID");
             }
             return res.json()
         })
