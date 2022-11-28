@@ -11,3 +11,37 @@
 </div>
 {% endif %}
 {%- endmacro %}
+
+
+{% macro display_results(processed_request, results) -%}
+{% if processed_request.is_success %}
+<div class="alert alert-info" role="alert">
+    <p>Query processed</p>
+    <a class="btn btn-primary" href="/download?id={{ processed_request.id }}">
+        Download results
+    </a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            {% for name in results[0] %}
+            <th scope="col">{{ name }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for result in results %}
+        {% if loop.index > 1 %}
+        <tr>
+            {% for column in result %}
+            <td>{{ column }}</td>
+            {% endfor %}
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endif %}
+{%- endmacro %}

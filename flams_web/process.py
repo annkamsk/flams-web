@@ -3,11 +3,12 @@ import dataclasses
 from enum import Enum, auto
 import json
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 import uuid
 from flams.input import is_valid_fasta_file, is_position_lysine
 from flams.databases.setup import update_db_for_modifications
 from flams.run_blast import run_blast
+from flams.display import display_result
 import requests
 from flams_web.form import InputForm
 
@@ -121,13 +122,25 @@ def generate_request_id():
 def run_blast_and_save_result(request: ProcessedRequest):
     # TODO this should be run within some setup function on app install
     update_db_for_modifications(request.data.modifications)
-    run_blast(
+    results = run_blast(
         input=UPLOAD_PATH / f"{request.id}.fa",
         modifications=request.data.modifications,
         lysine_pos=request.data.position,
         lysine_range=request.data.range,
     )
-    # TODO uncomment when display_result merged to main
-    # filename = RESULTS_PATH / f"{request.id}.csv"
-    # display_result(filename, results)
-    # return filename
+    filename = RESULTS_PATH / f"{request.id}.csv"
+    display_result(filename, results)
+    return filename
+
+
+def is_valid_request_id(request_id: Optional[str]) -> bool:
+    """
+    Check that the result-id is given AND that it is alphanumeric only
+    Need to be careful here coz if input is not filtered, user could give path to any file in OS and download it...
+    Alphanumeric restriction should take care of this.
+    """
+    return request_id is not None and request_id.isalnum() and len(request_id) == 16
+
+
+def get_results_filename(request_id):
+    return RESULTS_PATH / f"{request_id}.tsv"

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% import "bootstrap4/form.html" as wtf %}
+{% import "macros.html" as macros %}
+
+{% block styles %}
+{{ bootstrap.load_css() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+{% endblock %}
+
+{% block content %}
+
+{% if processed_request is defined and results is defined %}
+{{ macros.display_results(processed_request, results) }}
+{% endif %}
+
+{% endblock %}
