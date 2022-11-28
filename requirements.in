@@ -1,6 +1,7 @@
 git+https://github.com/annkamsk/flams.git
 black
 bootstrap-flask
+python-dotenv
 flake8
 Flask
 flask_wtf

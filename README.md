@@ -17,6 +17,12 @@ Setup databases:
 
 `python install.py`
 
+Create env file:
+
+`touch .env`
+
+It should contain at least 2 variables: `ENV` (if set to `TEST` then the debug mode will be on) and `SECRET_KEY`, which has to be a long sequence of bytes.
+
 ## Run
 
 `python -m flams_web.app`
