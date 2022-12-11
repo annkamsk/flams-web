@@ -128,7 +128,7 @@ def run_blast_and_save_result(request: ProcessedRequest):
         lysine_pos=request.data.position,
         lysine_range=request.data.range,
     )
-    filename = RESULTS_PATH / f"{request.id}.csv"
+    filename = RESULTS_PATH / f"{request.id}.tsv"
     display_result(filename, results)
     return filename
 
